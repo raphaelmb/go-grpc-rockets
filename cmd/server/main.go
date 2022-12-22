@@ -3,8 +3,10 @@ package main
 import (
 	"log"
 
+	_ "github.com/gogo/protobuf/protoc-gen-gogo/grpc"
 	"github.com/raphaelmb/go-grpc-rockets/internal/db"
 	"github.com/raphaelmb/go-grpc-rockets/internal/rocket"
+	"github.com/raphaelmb/go-grpc-rockets/internal/transport/grpc"
 )
 
 func Run() error {
@@ -13,12 +15,20 @@ func Run() error {
 	if err != nil {
 		return err
 	}
+
 	err = rocketStore.Migrate()
 	if err != nil {
 		log.Println("Failed to run migrations")
 		return err
 	}
-	_ = rocket.New(rocketStore)
+
+	rktService := rocket.New(rocketStore)
+	rktHandler := grpc.New(rktService)
+
+	if err := rktHandler.Serve(); err != nil {
+		return err
+	}
+
 	return nil
 }
 
