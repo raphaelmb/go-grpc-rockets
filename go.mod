@@ -8,6 +8,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.10.0
+	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.8.1
 	google.golang.org/grpc v1.45.0
 	google.golang.org/protobuf v1.27.1

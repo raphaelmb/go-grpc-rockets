@@ -8,6 +8,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/raphaelmb/go-grpc-rockets/internal/rocket"
+	uuid "github.com/satori/go.uuid"
 )
 
 type Store struct {
@@ -62,6 +63,17 @@ func (s Store) InsertRocket(rkt rocket.Rocket) (rocket.Rocket, error) {
 	}, nil
 }
 
+// DeleteRocket - attempts to delete a rocket from the database return err if error
 func (s Store) DeleteRocket(id string) error {
+	uid, err := uuid.FromString(id)
+	if err != nil {
+		return err
+	}
+
+	_, err = s.db.Exec(`delete from rockets where id = $1`, uid)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
